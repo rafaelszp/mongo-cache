@@ -1,0 +1,11 @@
+mongocache.mongo.HOST: 10.21.154.20
+mongocache.mongo.PORT: 27017
+mongocache.mongo.DB: cache_test
+mongocache.mongo.USER: cache
+mongocache.mongo.PWD: cache
+
+swarm:
+  port:
+    offset: 1010
+  context:
+    path: /cache
