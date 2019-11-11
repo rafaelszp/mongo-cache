@@ -9,6 +9,7 @@ que neste caso é utilizado somente como cache.
 Não faz parte do escopo deste projeto:
 
 1. Modelagem e implementação de rotinas referentes ao banco principal(produção);
+    - Ver: https://docs.mongodb.com/manual/data-modeling/
 1. Definição de estratégias de cache;
     - Ver: https://zubialevich.blogspot.com/2018/08/caching-strategies.html
     - Ver: https://codeahoy.com/2017/08/11/caching-strategies-and-how-to-choose-the-right-one/
