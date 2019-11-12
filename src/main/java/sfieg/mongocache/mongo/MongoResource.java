@@ -9,13 +9,17 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
-import com.mongodb.client.model.TextSearchOptions;
 import org.bson.Document;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import java.util.Arrays;
+
+import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
+import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @SuppressWarnings("all")
 public class MongoResource {
@@ -39,10 +43,11 @@ public class MongoResource {
                     .applyToClusterSettings(builder ->
                             builder.hosts(Arrays.asList(address)))
                     .credential(credentials)
+                    .codecRegistry(this.codecRegistry())
                     .build());
 
     MongoDatabase database = client.getDatabase(db);
-    createIndexes(database);
+    this.createIndexes(database);
     return database;
   }
 
@@ -52,6 +57,14 @@ public class MongoResource {
   private void createIndexes( MongoDatabase database){
     MongoCollection<Document> collection = database.getCollection("users");
     collection.createIndex(Indexes.text("login"));
-    collection.createIndex(Indexes.ascending("id"), new IndexOptions().unique(true));
+    collection.createIndex(Indexes.ascending("userId"), new IndexOptions().unique(true));
+  }
+
+  private CodecRegistry codecRegistry() {
+    CodecRegistry pojoCodecRegistry = fromRegistries(
+            MongoClientSettings.getDefaultCodecRegistry(),
+            fromProviders(PojoCodecProvider.builder().automatic(true).build())
+    );
+    return pojoCodecRegistry;
   }
 }

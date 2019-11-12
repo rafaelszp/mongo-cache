@@ -1,7 +1,5 @@
 package sfieg.mongocache.users;
 
-import org.bson.Document;
-
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,7 +17,7 @@ public class UserEndpoint {
 
   @GET
   public Response get(@QueryParam("start") int start, @QueryParam("q") String query) {
-    List<Document> result = service.fetch(start, query);
+    List<UserDTO> result = service.fetch(start, query);
     return Response.ok(result)
             .header("Count", result.size())
             .build();
@@ -28,7 +26,7 @@ public class UserEndpoint {
   @GET
   @Path("/search/{term}")
   public Response slowGet(@PathParam("term") String term,@QueryParam("start") int start) {
-    List<Document> result = service.slowFetch(start, term);
+    List<UserDTO> result = service.slowFetch(start, term);
     return Response.ok(result)
             .header("Count", result.size())
             .build();
@@ -37,7 +35,7 @@ public class UserEndpoint {
   @GET
   @Path("/{id:\\d+}")
   public Response get(@PathParam("id") Long id) {
-    Document result = service.fetchById(id);
+    UserDTO result = service.fetchById(id);
     return Response.ok(result).build();
   }
 }
